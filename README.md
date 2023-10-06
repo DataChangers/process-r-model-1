@@ -4,7 +4,7 @@
 
 This tutorial is about graphing a simple moderation model with the help of R with Hayes's PROCESS source code, and my MD2C graphing template.
 
-Andrew Hayes developed the [PROCESS macro for mediation, moderation and conditional process analysis](http://www.processmacro.org/). He also wrote a fantastic book about it: [Introduction to Mediation, Moderation and Conditional Process Analysis](https://www.guilford.com/books/Introduction-to-Mediation-Moderation-and-Conditional-Process-Analysis/Andrew-Hayes/9781462549030).
+Andrew Hayes developed the [PROCESS macro for mediation, moderation, and conditional process analysis](http://www.processmacro.org/). He also wrote a fantastic book about it: [Introduction to Mediation, Moderation and Conditional Process Analysis](https://www.guilford.com/books/Introduction-to-Mediation-Moderation-and-Conditional-Process-Analysis/Andrew-Hayes/9781462549030).
 
 I made several Excel templates to help you [graph conditional effects](https://www.md2c.nl/process-graphing-templates/), but these were always based on SPSS output only.
 
@@ -13,7 +13,7 @@ The good news is that Hayes also developed PROCESS for R. So now you can graph y
 ## Prerequisites
 
 ### Book
-First and foremost I would recommend you to buy and read Andrew Hayes' book:  [Introduction to Mediation, Moderation and Conditional Process Analysis](https://www.guilford.com/books/Introduction-to-Mediation-Moderation-and-Conditional-Process-Analysis/Andrew-Hayes/9781462549030).
+First and foremost, I would recommend you to buy and read Andrew Hayes' book [Introduction to Mediation, Moderation, and Conditional Process Analysis](https://www.guilford.com/books/Introduction-to-Mediation-Moderation-and-Conditional-Process-Analysis/Andrew-Hayes/9781462549030).
 
 
 ### PROCESS source code for R with data
@@ -21,19 +21,77 @@ You can find the source code on the [Resource Hub](https://haskayne.ucalgary.ca/
  of the Canadian Centre for Research Analysis and Methods (CCRAM). Here you can find many resources, among which there is the [PROCESS macro for SPSS, SAS, and R](https://www.afhayes.com/public/processv43.zip). This zip file comes with the data as well.
 
  ### R
- And of course you need [R](https://cran.r-project.org/) to write the code and run the PROCESS formula. You might want to install an interface as well. I us [RStudio Desktop](https://posit.co/download/rstudio-desktop/).
+ And of course, you need [R](https://cran.r-project.org/) to write the code and run the PROCESS formula. You might want to install an interface as well. I us [RStudio Desktop](https://posit.co/download/rstudio-desktop/).
 
  ### MD2C graphing template for model 1
- At my [webshop](https://www.md2c.nl/shop/) you can find the MD2C graohing template for model 1 (simple moderation).
+ At my [shop](https://www.md2c.nl/shop/) you can find the MD2C graphing template for model 1 (simple moderation).
 
 ## The case: climate change disasters and humanitarianism
 
-The case that Hayes uses is based on the article of Chapman and Lickel (2016). It’s about a group of 211 people that read about famine in Africa caused by the droughts affecting the region. Half of the group got the information that climate change caused the drought, and the other half of the group did not get information about the cause of the drought. This resulted in a dichotomous variable called “FRAME”, with values 1 for those who received the climate change information, and 0 for those who didn’t get this information. After reading the article, they had to answer to what extent the agreed/disagreed to not help the victims. The score was captures in the continuous variable “JUSTIFY”, representing the strength of withholding aid to the victims. Finally, they got question regarding their belief in climate change, resulting in the continuous variable “SKEPTIC”, representing to what extent somebody is skeptic regarding climate change.
+The case that Hayes uses is based on the article of Chapman and Lickel (2016). It’s about a group of 211 people that read about famine in Africa caused by the droughts affecting the region. Half of the group got the information that climate change caused the drought, and the other half of the group did not get information about the cause of the drought. This resulted in a dichotomous variable called “FRAME”, with values 1 for those who received the climate change information, and 0 for those who didn’t get this information. After reading the article, they had to answer to what extent they agreed/disagreed to not help the victims. The score was captured in the continuous variable “JUSTIFY”, representing the strength of withholding aid to the victims. Finally, they got a question regarding their belief in climate change, resulting in the continuous variable “SKEPTIC”, representing to what extent somebody is skeptical regarding climate change.
 
-In this blog we are purely focusing on the graphing part. If you would like to know more about the case, I would highly recommend you to read the book.
+So now we have all variables to test whether framing the disaster as caused by climate change rather than leaving the cause unspecified (FRAME) influences people’s justifications for not helping (JUSTIFY), and whether this effect of framing is dependent on a person’s skepticism about climate change (SKEPTIC).
 
+![PROCESS MODEL 1](<PROCESS Model 1.png>)
 
+In this blog I am purely focusing on the graphing part. If you would like to know more about the case, I would highly recommend you read the book. In fact, I strongly believe that without this book, it would be really challenging to understand what the PROCESS macro does, how to define the settings and understand the interpretation of the results. So, this does require effort, but the good news is that, in my opinion, Hayes is an excellent writer with the gift of explaining complex statistics in a nice, readable way, always accompanied by clear stories. 
 
+## The code
+You can find the [R code for model 1](<process model 1.R>) in this repository. In order to run the code, make sure you save the source code for PROCESS (process.R from the [PROCESS macro for SPSS, SAS, and R](https://www.afhayes.com/public/processv43.zip) zip file) in the same directory as the R code for model 1.
+You also need to store de dataset "disaster.csv" in the same directory. You can find this data in the same  [PROCESS macro for SPSS, SAS, and R](https://www.afhayes.com/public/processv43.zip) zip file.
+
+You start with the required libraries.
+```
+# Install the required packages if needed
+list.of.packages <- c("readr", "Rcpp")
+new.packages <- list.of.packages[!(list.of.packages %in% installed.packages()[, "Package"])]
+if (length(new.packages)) install.packages(new.packages)
+
+# Load libraries
+library(readr)
+library(Rcpp)
+```
+
+Then you set your working directory.
+```
+
+# Set working directory, choose the name of your folder
+PATH_TO_YOUR_WORKING_DIRECTORY <- "YOUR_PATH"
+setwd(PATH_TO_YOUR_WORKING_DIRECTORY)
+```
+
+Now you have to source the PROCESS formula. Make sure you have downloaded the code and saved it in the same directory as this script.
+
+```
+# Load the PROCESS macro for R, this might take a while
+source("process.R")
+```
+
+Furthermore, we need the data. Make sure you have downloaded the data and saved it in the same directory as this script.
+
+```
+# read the data file DISASTER
+filename <- "disaster.csv"
+disaster <- read.csv(file=filename,head=TRUE,sep=",",na.strings=c("NA","#DIV/0!","#N/A",""))
+
+```
+
+Finally, we are able to use the PROCESS formula to get the model analysis results.
+
+```
+## MODERATION ANALYSIS: Climate Change Disasters and Humanitarianism
+# The dataset contains the variables to test whether framing the disaster as caused by climate change 
+# rather than leaving the cause unspecified (frame) influences people’s 
+# justifications for not helping (justify), and whether this effect of framing 
+# is dependent on a person’s skepticism about climate change (skeptic).
+# We also want to obtain data to plot the graphs, both the conditional effect
+# of the focal predictor "frame" (plot=1) as the conditional effect of 
+# focal predictor "frame" at values of the moderator "skeptic" (jn=1)
+process(data=disaster,y="justify",x="frame",w="skeptic",model=1,plot=1,jn=1)
+```
+
+# Visualizing the graphs
+TBD
 
 
 
