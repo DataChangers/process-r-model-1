@@ -1,7 +1,5 @@
 # Graphing a moderation model (model 1) using R, PROCESS (source code) and the MD2C graphing template
 
-## UNDER CONSTRUCION, PLEASE BE PATIENT...
-
 This tutorial is about graphing a simple moderation model with the help of R with Hayes's PROCESS source code, and my MD2C graphing template.
 
 Andrew Hayes developed the [PROCESS macro for mediation, moderation, and conditional process analysis](http://www.processmacro.org/). He also wrote a fantastic book about it: [Introduction to Mediation, Moderation and Conditional Process Analysis](https://www.guilford.com/books/Introduction-to-Mediation-Moderation-and-Conditional-Process-Analysis/Andrew-Hayes/9781462549030).
@@ -34,7 +32,7 @@ So now we have all variables to test whether framing the disaster as caused by c
 
 ![PROCESS MODEL 1](<PROCESS Model 1.png>)
 
-In this blog I am purely focusing on the graphing part. If you would like to know more about the case, I would highly recommend you read the book. In fact, I strongly believe that without this book, it would be really challenging to understand what the PROCESS macro does, how to define the settings and understand the interpretation of the results. So, this does require effort, but the good news is that, in my opinion, Hayes is an excellent writer with the gift of explaining complex statistics in a nice, readable way, always accompanied by clear stories. 
+In this tutorial I am purely focusing on the graphing part. If you would like to know more about the case, I would highly recommend you read the book. In fact, I strongly believe that without this book, it would be really challenging to understand what the PROCESS macro does, how to define the settings and understand the interpretation of the results. So, this does require effort, but the good news is that, in my opinion, Hayes is an excellent writer with the gift of explaining complex statistics in a nice, readable way, always accompanied by clear stories. 
 
 ## The code
 You can find the [R code for model 1](<process model 1.R>) in this repository. In order to run the code, make sure you save the source code for PROCESS (process.R from the [PROCESS macro for SPSS, SAS, and R](https://www.afhayes.com/public/processv43.zip) zip file) in the same directory as the R code for model 1.
@@ -80,18 +78,70 @@ Finally, we are able to use the PROCESS formula to get the model analysis result
 
 ```
 ## MODERATION ANALYSIS: Climate Change Disasters and Humanitarianism
-# The dataset contains the variables to test whether framing the disaster as caused by climate change 
-# rather than leaving the cause unspecified (frame) influences people’s 
+# The dataset contains the variables to test whether framing the disaster as caused 
+# by climate change rather than leaving the cause unspecified (frame) influences people’s 
 # justifications for not helping (justify), and whether this effect of framing 
 # is dependent on a person’s skepticism about climate change (skeptic).
 # We also want to obtain data to plot the graphs, both the conditional effect
 # of the focal predictor "frame" (plot=1) as the conditional effect of 
 # focal predictor "frame" at values of the moderator "skeptic" (jn=1)
+
 process(data=disaster,y="justify",x="frame",w="skeptic",model=1,plot=1,jn=1)
 ```
 
 # Visualizing the graphs
-TBD
+Wait for the function to come back with the result...and now you have everything!
+First, you would have to analyze the results of the model. Hayes explains every detail of this process. As we are here focusing on the visualization part, we can directly go to the output. Besides, you would need the [MD2C graphing template for model 1](https://www.md2c.nl/shop/graph-model-1-with-r-dich-iv-on-x-axis-cont-w-in-legend/).
+
+## Visualizing the moderation effect
+In order to obtain the graph of the moderation effect, there are a 3 steps.
+
+### Step 1: open the MD2C graphing template and enter the variables
+Open the MD2C graphing template, and on the "ModerationEffect" tab, enter your variable names:
+![Step 1: Enter variable names](<step 1 variable names.JPG>)
+
+### Step 2: copy the data
+The next step is to scroll down the output of the PROCESS function in R and go to the **data for visualizing the conditional effect** part. Copy the data, without the headers:
+
+![Step 2: Copy the data](<data for visualizing the conditiona effect.JPG>)
+
+### Step 3: paste the data
+Now go back to the MD2C graphing template and paste the data (values only) in the "ModerationEffect" tab:
+![Step 3: paste the data](<paste data from R in MD2C template.JPG>)
+
+
+And there you go! Your graph is nearly ready. Please check the bound values of the x and y-axis ("format axis" in Excel), as they depend on your data. Please also check the unit steps. And this is how your graph could look like:
+
+
+![Final moderation graph](<Graph model 1 with R moderation effect.JPG>)
+
+## Visualizing the conditional effect
+In order to visualize the condition effect, there are also 3 steps.
+
+### Step 1: open the MD2C graphing template and enter the variables
+Open the MD2C graphing template, and on the "ConditionalEffect" tab, enter your variable names:
+![Step 1: enter variable names](<step 1 variable names.JPG>)
+
+### Step 2: copy the data
+The next step is to scroll down the output of the PROCESS function in R and go to the **Conditional effect of focal predictor at values of the moderator** part. Copy the data with the headers:
+
+![Step 2: copy the data with the headers](<conditional effect data.JPG>)
+
+### Step 3: paste the data
+Now go back to the MD2C graphing template and paste the data with the header(values only) in the "ConditionalEffect" tab:
+
+![Step 3: paste the data in the MD2C graphing template](<paste data from R in MD2C template conditional effect.JPG>)
+
+
+And there you go! Your graph is nearly ready. Please check the bound values of the x and y-axis ("format axis" in Excel), as they depend on your data. Please also check the unit steps. And this is how your graph could look like:
+
+
+![Final graph of conditional effects](<Graph model 1 with R.JPG>)
+
+I hope you find this tutorial useful, and I would love to hear if you have any comments or recommendations!
+
+
+
 
 
 
